@@ -20,7 +20,20 @@ class Program
 
         List<User> users = JsonConvert.DeserializeObject<List<User>>(jsonData);
 
-        Console.WriteLine("Users List:\n");
+        User newUser = new User
+        {
+            Name = "Emma Wilson",
+            Age = 28,
+            City = "Berlin"
+        };
+
+        users.Add(newUser);
+
+        string updatedJson = JsonConvert.SerializeObject(users, Formatting.Indented);
+
+        File.WriteAllText(filePath, updatedJson);
+
+        Console.WriteLine("Updated User List:\n");
 
         foreach (User user in users)
         {
