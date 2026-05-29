@@ -10,32 +10,52 @@ public class User
     public string City { get; set; }
 }
 
+public class Admin : User
+{
+    public string AdminLevel { get; set; }
+}
+
+public class RegularUser : User
+{
+    public string MembershipType { get; set; }
+}
+
 class Program
 {
     static void Main(string[] args)
     {
-        string filePath = "users.json";
+        List<User> users = new List<User>();
 
-        string jsonData = File.ReadAllText(filePath);
-
-        List<User> users = JsonConvert.DeserializeObject<List<User>>(jsonData);
-
-        User newUser = new User
+        Admin admin = new Admin
         {
-            Name = "Emma Wilson",
-            Age = 28,
-            City = "Berlin"
+            Name = "Michael",
+            Age = 35,
+            City = "Chicago",
+            AdminLevel = "Super Admin"
         };
 
-        users.Add(newUser);
+        RegularUser regularUser = new RegularUser
+        {
+            Name = "Sarah",
+            Age = 22,
+            City = "Toronto",
+            MembershipType = "Gold"
+        };
 
-        string updatedJson = JsonConvert.SerializeObject(users, Formatting.Indented);
+        users.Add(admin);
+        users.Add(regularUser);
 
-        File.WriteAllText(filePath, updatedJson);
+        string jsonData = JsonConvert.SerializeObject(users, Formatting.Indented);
 
-        Console.WriteLine("Updated User List:\n");
+        File.WriteAllText("user_types.json", jsonData);
 
-        foreach (User user in users)
+        string readJson = File.ReadAllText("user_types.json");
+
+        List<User> deserializedUsers = JsonConvert.DeserializeObject<List<User>>(readJson);
+
+        Console.WriteLine("Deserialized Users:\n");
+
+        foreach (User user in deserializedUsers)
         {
             Console.WriteLine($"Name: {user.Name}");
             Console.WriteLine($"Age: {user.Age}");
